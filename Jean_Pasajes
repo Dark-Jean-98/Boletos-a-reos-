@@ -1,0 +1,173 @@
+import numpy as np
+
+menu = 0
+pasajero = {}
+valida = True
+cont = 0
+contadorentradas = 1
+contadorplatinum = 0
+contadorgold= 0
+contadorsilver = 0
+contadorentradastotal = 0
+valor_total = 0
+asientos = np.arange(start=1, stop=101).reshape(10, 10)
+ganancias = 0
+
+def Total(ganancias):
+  print("Tipo de entrada    -   Cantidad        -            total  ")
+  print(f"Platinum $120.000   -      {contadorplatinum}            -     {contadorplatinum*120000}")
+  print(f"Gold     $80.000    -      {contadorgold}            -     {contadorgold*80000}")
+  print(f"Silver   $50.000    -      {contadorsilver}            -     {contadorsilver*50000}")
+  print(f"Total               -      {contadorplatinum+contadorgold+contadorsilver}            -     {contadorsilver*50000+contadorgold*80000+contadorplatinum*120000}")
+
+def MuestraAsientos(asientos):
+  for i in range(9, len(asientos)):
+    print('                 ESCENARIO')
+    print('           ------------------') 
+    print('          =======PLATINUM=====')   
+    print(asientos[0:2])
+    print('          ==================') 
+    print('          ========GOLD======') 
+    print('          ==================') 
+  for i in range(9, len(asientos)):    
+    print(asientos[2:5])
+    print('         ------------------') 
+    print('         ==================') 
+    print('         ========SILVER====') 
+    print('         ==================') 
+  for i in range(9, len(asientos)):    
+    print(asientos[5:10])
+    print('  ------------------') 
+
+
+def ComprarAsientos():
+  global valida
+  global cont
+  global contadorentradas 
+  global contadorplatinum 
+  global contadorgold
+  global contadorsilver 
+  global valor_total
+
+  contadorentradas = int(input("Ingrese el numero de entradas a comprar (Máximo 3) "))
+
+  if contadorentradas <= 3:
+
+   for i in range (0, contadorentradas, 1):
+   
+    busqueda = int(input('\ningrese el numero de asiento deseado: '))
+  
+    for f in range(10):
+      for c in range(10):
+
+        while (asientos[f][c] == busqueda):
+          try:
+            print('Asiento disponible')
+
+            #VALOR
+            if busqueda >= 51 and busqueda <=100:
+              valor_d = 50000
+              contadorentradas = contadorentradas + 1 
+              contadorsilver = contadorsilver + 1
+            elif busqueda >= 21 and busqueda <=50:
+              valor_d = 80000
+              contadorentradas = contadorentradas + 1
+              contadorgold = contadorgold + 1
+            else:
+              valor_d = 120000      
+              contadorentradas = contadorentradas + 1
+              contadorplatinum = contadorplatinum + 1
+
+            #RUT
+            while valida:
+              try:
+                rut = int(input('Ingrese el Rut del pasajero: '))
+                if 5000000 <= rut <= 999999999:
+                  rut_d = rut
+                  valida = False
+                else:
+                  print('Numero de Rut invalido')
+              except:    
+                print('El Rut ingresado no debe tener dígito verificador ni puntos')
+              
+            valida = True
+
+            print('Compra realizada con EXITO.....')
+            pasajero[f'{rut_d}'] = {'Valor':valor_d, 'Asiento':busqueda}      
+
+            print('    RESUMEN DE LA COMPRA    ')
+            print('----------------------------------------------')
+            print(f'El rut del cliente es: {rut_d}')
+            print(f'El asiento comprado es: {busqueda}')
+            print(f'Valor asiento: {valor_d}')
+            print('----------------------------------------------')
+
+            cont = cont + 1
+            valor_total = valor_d + valor_total
+            contadorentradas = contadorentradas + 1 
+            
+
+            #RESERVA EL ASIENTO
+            asientos[asientos == busqueda] = 0
+         
+            
+          except:
+            print(f'Asiento numero {busqueda} Ocupado')
+
+
+  else:
+    print("El máximo permitido para comprar son 3 entradas ")
+      
+  return pasajero
+
+def Inicio():
+  global menu
+  while menu != 5:
+    print('\nMenu')
+    print('\n1 Comprar asiento')
+    print('\n2 Ver asientos disponibles')
+    print('\n3 Ver Listado de asistentes')
+    print('\n4 Mostrar ganancias totales')
+    print('\n5 Salir')
+    menu = int(input('\nIngrese la opcion deseada: '))
+
+
+    # COMPRAR ASIENTOS
+    if menu == 1:
+      print('\nOpcion comprar asiento')
+      MuestraAsientos(asientos)
+      ComprarAsientos()
+      input('\nPresione una tecla para continuar')
+
+      
+    # VER ASIENTOS DISPONIBLES
+    if menu == 2:
+      print('\nLos asientos disponibles son los siguientes: \n')
+      MuestraAsientos(asientos)
+      input('\nPresione una tecla para continuar')
+      
+
+    # LISTADO DE ASISTENTES        
+    if menu == 3:
+      print('\nOpcion Ver Listado de asistentes\n')
+      for key, value in pasajero.items():
+              print ('Rut', key)
+              
+    # Profe intenté ponerle el SORT pero no encontré por donde ... 
+              
+      input('\nPresione una tecla para continuar')
+
+    # GANANCIAS TOTALES         
+    if menu == 4:
+      print('\nOpcion Mostrar ganancias totales\n')
+      Total(ganancias)  
+      input('\nPresione una tecla para continuar')
+
+    #SALIR         
+    if menu == 5:
+      print('Gracias por usar el sistema de compras')
+      print('Ha salido del sistema')
+      print("Jean Castillo")
+      print("07/07/2022")
+
+Inicio()
